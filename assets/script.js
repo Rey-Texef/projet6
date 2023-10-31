@@ -1,15 +1,15 @@
 fetch("http://localhost:5678/api/works")
   .then(response => response.json())
-  .then(data => {
-    afficherImages(data)
+  .then(imgProj => {
+    afficherImages(imgProj)
   })
   .catch(error => {
     console.error("Erreur lors de la récupération des données :", error)
   });
 
-function afficherImages(data) {
+function afficherImages(imgProj) {
     const gallery = document.querySelector(".gallery")
-    data.forEach(item => {
+    imgProj.forEach(item => {
         const fig = document.createElement("figure")
         const img = document.createElement("img")
         img.src = item.imageUrl
@@ -21,3 +21,29 @@ function afficherImages(data) {
         fig.appendChild(titre)
     });
 }
+
+fetch("http://localhost:5678/api/categories")
+  .then(response => response.json())
+  .then(filtres => {
+    creerFiltres(filtres)
+  })
+  .catch(error => {
+    console.error("Erreur lors de la récupération des données :", error)
+  });
+
+function creerFiltres(filtres) {
+  const filtresPos = document.querySelector(".filtres")
+  filtres.forEach(item => {
+    const boutFilt = document.createElement("button")
+    boutFilt.classList.add("boutonFiltre")
+    boutFilt.id = item.name
+    boutFilt.textContent = item.name
+    filtresPos.appendChild(boutFilt)
+  })
+}
+
+const boutonTous = document.getElementById("tous")
+boutonTous.addEventListener("click", function () {
+  document.querySelector(".gallery").innerHTML = ""
+  afficherImages(imgProj)
+})

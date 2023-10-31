@@ -125,6 +125,54 @@ li:hover {
 	text-align: center;
 	margin-bottom: 1em;
 }
+
+.filtres {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+.boutonFiltre {
+	min-width: 100px;
+	height: 37px;
+	border: 1px solid rgba(29, 97, 84, 1);
+	color: rgba(29, 97, 84, 1);
+	border-radius: 60px;
+	font-family: Syne;
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 19px;
+	letter-spacing: 0em;
+	text-align: center;
+	background-color: white;
+	padding: 0 10px;
+	margin: 10px;
+	margin-bottom: 3em;
+}
+
+.boutonFiltre:hover {
+	color: white;
+	background-color: rgba(29, 97, 84, 1);
+}
+
+.boutonFiltreClic {
+	color: white;
+	background-color: rgba(29, 97, 84, 1);
+	min-width: 100px;
+	height: 37px;
+	border: 1px solid rgba(29, 97, 84, 1);
+	border-radius: 60px;
+	font-family: Syne;
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 19px;
+	letter-spacing: 0em;
+	text-align: center;
+	padding: 0 10px;
+	margin: 10px;
+	margin-bottom: 3em;
+}
+
 .gallery {
 	width: 100%;
 	display: grid;
