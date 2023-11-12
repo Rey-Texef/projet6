@@ -154,6 +154,7 @@ li:hover, .loginBouton:hover {
 	padding: 0 10px;
 	margin: 10px;
 	margin-bottom: 3em;
+	transition: color 0.5s ease-in-out, background-color 0.5s ease-in-out;
 }
 
 .boutonFiltre:hover {
@@ -306,5 +307,22 @@ footer nav ul {
 	text-align: center;
 	padding: 0 10px;
 	margin: 37px 0 28px 0;
+	transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
+}
+
+#boutonLog:hover {
+	color: rgba(29, 97, 84, 1);
+	background-color: white;
+}
+
+#errorAuthent {
+	font-family: Work Sans;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 16px;
+	letter-spacing: 0em;
+	text-align: left;
+	margin-top: 15px;
+	color: darkred;
 }
 

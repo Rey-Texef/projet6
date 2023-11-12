@@ -24,13 +24,14 @@
 </header>
 <main class="login">
 	<div class="logTitle">Log In</div>
-    <form action="" class="logInput">
+    <div id="errorAuthent"></div>
+    <form method="post" class="logInput">
             <label for="email">E-mail</label>
             <input type="email" name="email" id="email">
             <label for="password">Mot de passe</label>
             <input type="password" name="password" id="password">
+            <button id="boutonLog">Se connecter</button>
     </form>
-    <button id="boutonLog">Se connecter</button>
     <a href="">Mot de passe oublié</a>
 </main>
 <footer>
@@ -40,5 +41,6 @@
 		</ul>
 	</nav>
 </footer>
+<script src="./assets/script.js"></script>
 </body>
 </html>
