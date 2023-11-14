@@ -2,72 +2,28 @@ const worksUrl = "http://localhost:5678/api/works"
 const categoriesUrl = "http://localhost:5678/api/categories"
 const gallery = document.querySelector(".gallery")
 const filtresPos = document.querySelector(".filtres")
+const boutonTous = document.getElementById("tous")
 
-async function pageActuelle () {
-  const currentPageURL = window.location.href
-  if (currentPageURL.includes("index")) {
-    const gallery = document.querySelector(".gallery")
-    const filtresPos = document.querySelector(".filtres")
-    const boutonTous = document.getElementById("tous")
-    boutonTous.classList.add("boutonFiltreClic")
-    boutonTous.classList.remove("boutonFiltre")
-    recupWorks()
-    recupCategories()
-    affichAllWorks()
-    afficherCategories()
-    const token = localStorage.getItem('authToken')
-    if (token) {
-      const logBouton = document.querySelector(".loginBouton")
-      logBouton.textContent = "logout"
-      logBouton.addEventListener("click", function() {
-        localStorage.removeItem("authToken")
-      })
-    }
-    else {
-      console.log('Aucun token trouvé dans le localStorage')
-    }
-  }  
-  else {
-    boutonLog = document.getElementById("boutonLog")
-    boutonLog.addEventListener("click", function(event) {
-        event.preventDefault()
-        const email = document.getElementById("email").value
-        const password = document.getElementById("password").value
-        const data = {
-            email: email,
-            password: password
-        }
-        fetch("http://localhost:5678/api/users/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        })
-          .then(response => response.json())
-          .then(data => {
-              if (data.token) {
-                const token = data.token
-                try {
-                  localStorage.setItem("authToken", token)
-                  console.log("Token stocké avec succès : ", localStorage.getItem("authToken"))
-                  console.log(localStorage.getItem("authToken"))
-                } catch (e) {
-                  console.error("Erreur de stockage : ", e)
-                }
-                window.location.href = "index.html"
-              }
-              else {
-                console.error("Erreur d'authetification")
-                let errorAuthent = document.getElementById("errorAuthent")
-                errorAuthent.innerHTML = "** Le mot de passe et/ou l'email est(sont) faux **"
-              }
-          })
-          .catch(error => {
-              console.error("Une erreur s'est produite : ", error)
-          })
-    })
+boutonTous.classList.add("boutonFiltreClic")
+boutonTous.classList.remove("boutonFiltre")
+recupWorks()
+recupCategories()
+affichAllWorks()
+afficherCategories()
+const token = localStorage.getItem("authToken")
+if (token) {
+  const logBouton = document.querySelector(".loginBouton")
+  logBouton.textContent = "logout"
+  logBouton.addEventListener("click", function() {
+    localStorage.removeItem("authToken")
+  })
+  const modalBouton = document.getElementById("openModal")
+  const iconModal = document.getElementById("iconModal")
+  modalBouton.style.visibility = "visible"
+  iconModal.style.visibility = "visible"
 }
+else {
+  console.log("Aucun token trouvé dans le localStorage")
 }
 
 async function recupWorks() {
@@ -177,5 +133,97 @@ async function affichCatWorks(categoriesId) {
       })
 }
 
+// Récupération des éléments HTML
+const openModalBtn = document.getElementById("openModal")
+const modal = document.getElementById("myModal")
+const closeBtn = document.querySelector(".close")
 
-pageActuelle()
+// Fonction pour ouvrir la modale
+openModalBtn.addEventListener("click", function() {
+  modal.style.display = "flex"
+  const data = localStorage.getItem("works")
+  const worksArray = JSON.parse(data)
+  worksArray.forEach(item => {
+      const galerie = document.getElementById("galeriePhotos")
+      const card = document.createElement("div")
+      const img = document.createElement("img")
+      const trash = document.createElement("div")
+      const icon = document.createElement("i")
+      const title = item.title
+      const image = item.imageUrl
+      img.src = image
+      img.alt = title
+      icon.classList.add("fa-solid")
+      card.classList.add("photoCard")
+      icon.classList.add("fa-trash-can")
+      trash.classList.add("photoCard_supp")
+      img.classList.add("photoCard_img")
+      galerie.appendChild(card)
+      card.appendChild(img)
+      card.appendChild(trash)
+      trash.appendChild(icon)
+      trash.addEventListener("click", function() {
+        // Supprimer l'élément visuellement de la galerie
+        galerie.removeChild(card)
+        // Supprimer l'élément correspondant de l'API
+        // Vous devez implémenter cette fonction en fonction de votre structure API
+        supprimerElementAPI(item.id)
+      })
+  })
+  // Définir les dimensions des éléments et de la marge
+  const elementHeight = 105
+  const marginBetweenLines = 20
+  const elementsPerLine = 5
+  // Calculer le nombre de lignes nécessaire pour afficher tous les éléments
+  const numLines = Math.ceil(worksArray.length / elementsPerLine)
+  // Calculer la hauteur totale de la modal
+  const contentHeight = numLines * (elementHeight + marginBetweenLines) - marginBetweenLines
+  // Appliquer la hauteur calculée à la modal
+  const modalContent = document.querySelector('#galeriePhotos')
+  modalContent.style.height = `${contentHeight}px`
+})
+
+// Fonction pour fermer la modale
+closeBtn.addEventListener("click", async function() {
+  const galerie = document.getElementById("galeriePhotos")
+  galerie.innerHTML = ""
+  modal.style.display = "none"
+  let b = document.querySelector(".boutonFiltreClic")
+  b.classList.remove("boutonFiltreClic")
+  recupWorks()
+  affichAllWorks()
+})
+
+// Fermer la modale en cliquant en dehors de celle-ci
+window.addEventListener("click", function(event) {
+  if (event.target === modal) {
+    const galerie = document.getElementById("galeriePhotos")
+    galerie.innerHTML = ""
+    modal.style.display = "none"
+    let b = document.querySelector(".boutonFiltreClic")
+    b.classList.remove("boutonFiltreClic")
+    recupWorks()
+    affichAllWorks()
+  }
+})
+
+function supprimerElementAPI(id) {
+  const url = `http://localhost:5678/api/works/${id}`
+  fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Erreur lors de la suppression de l'élément avec l'ID ${id}`)
+      }
+      console.log(`Élément avec l'ID ${id} supprimé avec succès`)
+    })
+    .catch(error => {
+      console.error('Erreur de suppression:', error.message)
+    })
+}
+

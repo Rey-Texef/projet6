@@ -326,3 +326,153 @@ footer nav ul {
 	color: darkred;
 }
 
+.projetsModal {
+	display: flex;
+	justify-content: center;
+	align-items: baseline;
+}
+
+#openModal {
+	border: none;
+	background-color: white;
+	font-family: Work Sans;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 16px;
+	letter-spacing: 0em;
+	text-align: center;
+}
+
+#iconModal {
+	margin: 0 10px 0 31px;
+	width: 15.58px;
+	height: 15.58px;
+}
+
+.modal {
+	position: fixed;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.3);
+    z-index: 999;
+}
+
+.modalWrapper {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-color: rgba(255, 255, 255, 1);
+	width: 630px;
+	height: 688px;
+	max-width: calc(100vw - 100px);
+	max-height: calc(100vh - 10px);
+	border-radius: 10px;
+}
+  
+.modalContent {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 60px 100px 0 100px;
+	box-sizing: border-box;
+	overflow-y: auto;
+}
+  
+.close {
+	position: absolute;
+	right: 30px;
+	top: 26px;
+	color: rgba(0, 0, 0, 1);
+	width: 24px;
+	height: 24px;
+}
+  
+.close:hover,
+.close:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+}
+  
+.titreModal {
+	font-family: Work Sans;
+	font-size: 26px;
+	font-weight: 400;
+	line-height: 30px;
+	letter-spacing: 0em;
+	text-align: center;
+	color: rgba(0, 0, 0, 1);
+	margin-top: 60px;
+}
+
+#galeriePhotos {
+	padding-top: 50px;
+	padding-bottom: 67.3px;
+	width: 100%;
+	border-bottom: 1px solid rgba(179, 179, 179, 1);
+}
+
+.addButton {
+	border: none;
+	background-color: rgba(29, 97, 84, 1);
+	width: 237px;
+	Height: 36px;
+	border-radius: 60px;
+	font-family: Syne;
+	font-size: 14px;
+	font-weight: 700;
+	line-height: 17px;
+	letter-spacing: 0em;
+	text-align: center;
+	color: white;
+	margin-top: 38px;
+	margin-bottom: 45px;
+}
+
+#galeriePhotos {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+}
+
+.photoCard {
+	position: relative;
+	margin: 10px 3px;
+	flex: 0 0 calc(20% - 10px)
+}
+
+.photoCard_img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.photoCard_supp {
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	right: 4.86px;
+	top: 8.45px;
+	background-color: rgba(0, 0, 0, 1);
+	width: 17px;
+	height: 17px;
+	border-radius: 2px;
+}
+
+.fa-trash-can {
+	color: rgba(255, 255, 255, 1);
+	font-size: 9px;
+}

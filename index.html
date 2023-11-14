@@ -9,6 +9,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
+	<script src="https://kit.fontawesome.com/7eee16bfab.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <header>
@@ -35,7 +36,23 @@
 		</article>
 	</section>
 	<section id="portfolio">
-		<h2>Mes Projets</h2>
+		<div class="projetsModal">
+			<h2>Mes Projets</h2>
+			<div>
+				<i class="fa-regular fa-pen-to-square" id="iconModal" style="visibility: hidden;"></i>
+				<button id="openModal" style="visibility: hidden;">modifier</button>
+				<aside id="myModal" class="modal" style="display: none;">
+					<div class="modalWrapper">
+						<i class="fa-solid fa-x close"></i>
+						<div class="modalContent">
+					    	<div class="titreModal">Galerie photos</div>
+							<div id="galeriePhotos"></div>
+							<button class="addButton">Ajouter une photo</button>
+						</div>
+					</div>
+				</aside>
+			</div>
+		</div>
 		<div class="filtres">
 			<button id="tous" class="boutonFiltre">Tous</button>
 		</div>
