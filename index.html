@@ -12,6 +12,10 @@
 	<script src="https://kit.fontawesome.com/7eee16bfab.js" crossorigin="anonymous"></script>
 </head>
 <body>
+	<div class="editionMode" style="display: none;">
+		<i class="fa-regular fa-pen-to-square editionIcon"></i>
+		<div class="editionText">Mode édition</div>
+	</div>
 <header>
 	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 	<nav>
@@ -48,6 +52,30 @@
 					    	<div class="titreModal">Galerie photos</div>
 							<div id="galeriePhotos"></div>
 							<button class="addButton">Ajouter une photo</button>
+						</div>
+					</div>
+				</aside>
+				<aside id="addModal" class="modal2" style="display: none;">
+					<div class="modalWrapper">
+						<i class="fa-solid fa-arrow-left retour"></i>
+						<i class="fa-solid fa-x close2"></i>
+						<div class="modalContent2">
+							<div class="titreModal">Ajout photo</div>
+							<form class="addModal_input">
+								<div class="cadreImageInput">
+									<i class="fa-regular fa-image iconImg"></i>
+									<div id="addImgBouton">+ Ajouter photo</div>
+									<input type="file" name="imgInput" id="imgInput" accept=".jpg, .jpeg, .png" required>
+									<div class="infosAddImg">jpg, png : 4mo max</div>
+								</div>
+								<label for="addTitre">Titre</label>
+								<input type="text" name="addTitre" id="addTitre" required>
+								<label for="addCategory">Catégorie</label>
+								<select name="addCategory" id="addCategory" required>
+									<option value="0">rien</option>
+								</select>
+								<button id="boutonAjoutImage" class="addModal_button" type="submit">Valider</button>
+							</form>
 						</div>
 					</div>
 				</aside>

@@ -6,14 +6,35 @@ const boutonTous = document.getElementById("tous")
 
 boutonTous.classList.add("boutonFiltreClic")
 boutonTous.classList.remove("boutonFiltre")
-recupWorks()
+
+// Récupération des éléments HTML
+const openModalBtn = document.getElementById("openModal")
+const returnModalBtn = document.querySelector(".retour")
+const modal = document.getElementById("myModal")
+const modal2 = document.getElementById("addModal")
+const closeBtn = document.querySelector(".close")
+const closeBtn2 = document.querySelector(".close2")
+const addButton = document.querySelector(".addButton")
+const addImgBouton = document.getElementById("addImgBouton")
+const imgInput = document.getElementById("imgInput")
+const addTitre = document.getElementById("addTitre")
+const addCategory = document.getElementById("addCategory")
+const boutonAjoutImage =document.getElementById("boutonAjoutImage")
+const formulaireImg = document.querySelector(".addModal_input")
+const previewImage = document.getElementById('previewImage')
+
 recupCategories()
-affichAllWorks()
+affichNewWorks()
 afficherCategories()
+
+// Verification connexion
 const token = localStorage.getItem("authToken")
 if (token) {
   const logBouton = document.querySelector(".loginBouton")
+  const editionMode = document.querySelector(".editionMode")
+  editionMode.style.display = "flex"
   logBouton.textContent = "logout"
+  logBouton.href = "./index.html"
   logBouton.addEventListener("click", function() {
     localStorage.removeItem("authToken")
   })
@@ -72,7 +93,7 @@ async function affichAllWorks() {
       fig.appendChild(titre)
       let boutFilt = document.getElementById("tous")
       boutFilt.classList.add("boutonFiltreClic")
-  }) 
+  })
 }
 
 async function afficherCategories() {
@@ -133,13 +154,42 @@ async function affichCatWorks(categoriesId) {
       })
 }
 
-// Récupération des éléments HTML
-const openModalBtn = document.getElementById("openModal")
-const modal = document.getElementById("myModal")
-const closeBtn = document.querySelector(".close")
+// Met à jour local storage et affiche les projets
+async function affichNewWorks() {
+  try {
+    const data = await recupWorks() // Attendre que recupWorks soit terminé
+    gallery.innerHTML = ""
+    affichAllWorks()
+  } catch (erreur) {
+    console.error("Une erreur s'est produite lors de l'affichage des travaux : ", erreur);
+  }
+}
+
+async function refreshAfterAdd() {
+  try {
+    const data = await recupWorks() // Attendre que recupWorks soit terminé
+    closeModal2()
+    ouvrirModale2()
+  } catch (erreur) {
+    console.error("Une erreur s'est produite lors de l'affichage des travaux : ", erreur);
+  }
+}
+
+async function refreshAfterSuppr() {
+  try {
+    const data = await recupWorks() // Attendre que recupWorks soit terminé
+    closeModal()
+    ouvrirModale1()
+  } catch (erreur) {
+    console.error("Une erreur s'est produite lors de l'affichage des travaux : ", erreur);
+  }
+}
+
 
 // Fonction pour ouvrir la modale
-openModalBtn.addEventListener("click", function() {
+openModalBtn.addEventListener("click", ouvrirModale1)
+returnModalBtn.addEventListener("click", retourModale1)
+function ouvrirModale1() {
   modal.style.display = "flex"
   const data = localStorage.getItem("works")
   const worksArray = JSON.parse(data)
@@ -163,10 +213,6 @@ openModalBtn.addEventListener("click", function() {
       card.appendChild(trash)
       trash.appendChild(icon)
       trash.addEventListener("click", function() {
-        // Supprimer l'élément visuellement de la galerie
-        galerie.removeChild(card)
-        // Supprimer l'élément correspondant de l'API
-        // Vous devez implémenter cette fonction en fonction de votre structure API
         supprimerElementAPI(item.id)
       })
   })
@@ -176,15 +222,18 @@ openModalBtn.addEventListener("click", function() {
   const elementsPerLine = 5
   // Calculer le nombre de lignes nécessaire pour afficher tous les éléments
   const numLines = Math.ceil(worksArray.length / elementsPerLine)
-  // Calculer la hauteur totale de la modal
+  // Calculer la hauteur totale de la modale
   const contentHeight = numLines * (elementHeight + marginBetweenLines) - marginBetweenLines
-  // Appliquer la hauteur calculée à la modal
+  // Appliquer la hauteur calculée à la modale
   const modalContent = document.querySelector('#galeriePhotos')
   modalContent.style.height = `${contentHeight}px`
-})
+  addButton.addEventListener("click", ouvrirModale2)
+}
+
 
 // Fonction pour fermer la modale
-closeBtn.addEventListener("click", async function() {
+closeBtn.addEventListener("click", closeModal)
+async function closeModal() {
   const galerie = document.getElementById("galeriePhotos")
   galerie.innerHTML = ""
   modal.style.display = "none"
@@ -192,38 +241,189 @@ closeBtn.addEventListener("click", async function() {
   b.classList.remove("boutonFiltreClic")
   recupWorks()
   affichAllWorks()
-})
+}
 
 // Fermer la modale en cliquant en dehors de celle-ci
 window.addEventListener("click", function(event) {
   if (event.target === modal) {
-    const galerie = document.getElementById("galeriePhotos")
-    galerie.innerHTML = ""
-    modal.style.display = "none"
-    let b = document.querySelector(".boutonFiltreClic")
-    b.classList.remove("boutonFiltreClic")
-    recupWorks()
-    affichAllWorks()
+    closeModal()
   }
 })
 
+// Supprimer un element de l'API
 function supprimerElementAPI(id) {
-  const url = `http://localhost:5678/api/works/${id}`
-  fetch(url, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-  })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Erreur lors de la suppression de l'élément avec l'ID ${id}`)
+  var confirmation = confirm("Êtes-vous sûr de vouloir effectuer cette action ?")
+      if (confirmation) {
+        const url = `http://localhost:5678/api/works/${id}`
+        fetch(url, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`Erreur lors de la suppression de l'élément avec l'ID ${id}`)
+            }
+            console.log(`Élément avec l'ID ${id} supprimé avec succès`)
+          })
+          .catch(error => {
+            console.error('Erreur de suppression:', error.message)
+          })
+        alert("Action effectuée !")
+        refreshAfterSuppr()
+      } else {
+        alert("Action annulée.")
       }
-      console.log(`Élément avec l'ID ${id} supprimé avec succès`)
+}
+
+// Modal 2
+
+function ouvrirModale2() {
+  closeModal()
+  modal2.style.display = "flex"
+  addCategory.innerHTML =""
+  const data = localStorage.getItem("categories")
+  const catArray = JSON.parse(data)
+  let imageAdded = false
+  catArray.forEach(item => {
+    const select = document.getElementById("addCategory")
+    const option = document.createElement("option")
+    const nom = item.name
+    const valeur = item.id
+    option.value = valeur
+    option.textContent = nom
+    option.classList.add("champCat")
+    select.appendChild(option)
+  })
+  addCategory.selectedIndex = -1
+  verifForm()
+  boutonAjoutImage.addEventListener('click', sendWork)
+}
+
+// Permet de retourner à la modale 1 en cliquant sur la flèche
+function retourModale1() {
+  closeModal2()
+  ouvrirModale1()
+}
+
+
+// Permet d'ouvrir l'input d'images (invisible à l'écran) en cliquant sur le boutton associé
+addImgBouton.addEventListener("click", function () {
+  imgInput.click()
+})
+
+// Permet de lancer des actions lors d'un changement dans l'input images
+imgInput.addEventListener("change", function () {
+  const selectedImg = imgInput.files[0]
+  if (selectedImg && (selectedImg.type === "image/jpeg" || selectedImg.type === "image/png")) {
+    // Vérifier la taille du fichier (en octets)
+    if (selectedImg.size <= 4 * 1024 * 1024) {
+      // La taille et le type sont valides, vous pouvez utiliser l'image
+      const cadreImageInput = document.querySelector(".cadreImageInput")
+      const imgElement = document.createElement("img")
+      imgElement.id = "previewImage"
+      imgElement.alt = ""
+      addImgBouton.style.visibility = "hidden"
+      const addImageUrl = URL.createObjectURL(selectedImg)
+      imgElement.src = addImageUrl
+      cadreImageInput.appendChild(imgElement)
+      verifForm()
+    }
+    else {
+      alert("La taille de l'image doit être inférieure ou égale à 4 Mo.")
+      // Réinitialiser l'input file pour éviter de conserver une image invalide
+      imgInput.value = ""
+    }
+  } else {
+    alert("Veuillez sélectionner une image au format JPG ou PNG.")
+    // Réinitialiser l'input file pour éviter de conserver une image invalide
+    imgInput.value = ""
+  }
+})
+
+function verifForm() {
+  const form = document.querySelector(".addModal_input")
+  if (form.checkValidity()) {
+    boutonAjoutImage.classList.add("addModal_buttonCheck")
+    boutonAjoutImage.classList.remove("addModal_button")   
+  }
+  else {
+    if (boutonAjoutImage.classList.contains("addModal_buttonCheck")) {
+      boutonAjoutImage.classList.remove("addModal_buttonCheck")
+      boutonAjoutImage.classList.add("addModal_button")
+    }
+  }
+}
+
+addTitre.addEventListener("change", function () {
+  verifForm()
+})
+
+addCategory.addEventListener("change", function () {
+  verifForm()
+})
+
+// Fonction pour fermer la modale2
+closeBtn2.addEventListener("click", closeModal2)
+async function closeModal2() {
+  addTitre.value = ""
+  addCategory.innerHTML = ""
+  addImgBouton.style.visibility = "visible"
+  const elementASupprimer = document.getElementById("previewImage")
+  if (elementASupprimer) {
+    elementASupprimer.remove()
+  }
+  const galerie = document.getElementById("galeriePhotos")
+  galerie.innerHTML = ""
+  gallery.innerHTML = ""
+  modal2.style.display = "none"
+  let b = document.querySelector(".boutonFiltreClic")
+  b.classList.remove("boutonFiltreClic")
+  recupWorks()
+  affichAllWorks()
+}
+
+// Fermer la modale2 en cliquant en dehors de celle-ci
+window.addEventListener("click", function(event) {
+  if (event.target === modal2) {
+    closeModal2()
+  }
+})
+
+// fonction pour envoyer un projet
+function sendWork(event) {
+  if (boutonAjoutImage.classList.contains("addModal_buttonCheck")) {
+    event.preventDefault()
+    const formData = new FormData()
+    if (imgInput.files.length > 0) {
+      const file = imgInput.files[0]
+      formData.append('image', file)
+    }
+    formData.append('title', addTitre.value)
+    formData.append('category', addCategory.value)
+    const token = localStorage.getItem("authToken")
+    fetch(worksUrl, {
+      method: 'POST',
+      body: formData,
+      headers: {Authorization: 'Bearer ' + token}
     })
-    .catch(error => {
-      console.error('Erreur de suppression:', error.message)
+    .then((response) => {
+      if (response.ok) {
+        alert("Image envoyée avec succès")
+        refreshAfterAdd()
+      } else {
+        console.error("Erreur lors de l'envoi de l'image")
+        alert("Erreur lors de l'envoi de l'image")
+      }
     })
+    .catch((error) => {
+      console.error("Erreur d'envoi de données à l'API", error)
+    })
+  }
+  else {
+    alert("Veuillez remplir tous les formulaires")
+  }
 }
 
