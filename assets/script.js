@@ -42,6 +42,7 @@ if (token) {
   const iconModal = document.getElementById("iconModal")
   modalBouton.style.visibility = "visible"
   iconModal.style.visibility = "visible"
+  filtresPos.style.display = "none"
 }
 else {
   console.log("Aucun token trouvé dans le localStorage")
@@ -428,3 +429,8 @@ function sendWork(event) {
   }
 }
 
+// bouton Projets
+boutonProjets =document.getElementById("boutonProjets")
+boutonProjets.addEventListener("click", function () {
+  window.location.href = "index.html"
+})

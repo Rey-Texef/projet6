@@ -1,3 +1,7 @@
+boutonProjets =document.getElementById("boutonProjets")
+boutonProjets.addEventListener("click", function () {
+  window.location.href = "index.html"
+})
 boutonLog = document.getElementById("boutonLog")
 boutonLog.addEventListener("click", function(event) {
     event.preventDefault()
