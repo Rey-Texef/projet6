@@ -65,14 +65,16 @@
 								<div class="cadreImageInput">
 									<i class="fa-regular fa-image iconImg"></i>
 									<div id="addImgBouton">+ Ajouter photo</div>
-									<input type="file" name="imgInput" id="imgInput" accept=".jpg, .jpeg, .png" required>
+									<input type="file" name="imgInput" id="imgInput" accept=".jpg, .jpeg, .png">
 									<div class="infosAddImg">jpg, png : 4mo max</div>
 								</div>
 								<label for="addTitre">Titre</label>
 								<input type="text" name="addTitre" id="addTitre" required>
 								<label for="addCategory">Catégorie</label>
 								<select name="addCategory" id="addCategory" required>
-									<option value="0">rien</option>
+									<option value="" label="0"></option>
+									<option value="1">1</option>
+									<option value="2">2</option>
 								</select>
 								<button id="boutonAjoutImage" class="addModal_button" type="submit">Valider</button>
 							</form>

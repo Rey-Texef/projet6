@@ -54,7 +54,7 @@ async function recupWorks() {
           throw new Error(`Erreur HTTP ! Statut : ${reponse.status}`)
       }
       let data = await reponse.json()
-      let dataJson = await JSON.stringify(data)
+      let dataJson = JSON.stringify(data)
       localStorage.setItem("works", dataJson)
   } catch (erreur) {
       console.error("Une erreur s'est produite : ", erreur)
@@ -68,7 +68,7 @@ async function recupCategories() {
           throw new Error(`Erreur HTTP ! Statut : ${reponse.status}`)
       }
       let data = await reponse.json()
-      let dataJson = await JSON.stringify(data)
+      let dataJson = JSON.stringify(data)
       localStorage.setItem("categories", dataJson)
   } catch (erreur) {
       console.error("Une erreur s'est produite : ", erreur)
@@ -186,7 +186,7 @@ async function refreshAfterSuppr() {
 }
 
 
-// Fonction pour ouvrir la modale
+// Ouvre la modale
 openModalBtn.addEventListener("click", ouvrirModale1)
 returnModalBtn.addEventListener("click", retourModale1)
 function ouvrirModale1() {
@@ -231,7 +231,7 @@ function ouvrirModale1() {
 }
 
 
-// Fonction pour fermer la modale
+// Ferme la modale
 closeBtn.addEventListener("click", closeModal)
 async function closeModal() {
   const galerie = document.getElementById("galeriePhotos")
@@ -243,16 +243,16 @@ async function closeModal() {
   affichAllWorks()
 }
 
-// Fermer la modale en cliquant en dehors de celle-ci
+// Ferme la modale en cliquant en dehors de celle-ci
 window.addEventListener("click", function(event) {
   if (event.target === modal) {
     closeModal()
   }
 })
 
-// Supprimer un element de l'API
+// Supprime un element de l'API
 function supprimerElementAPI(id) {
-  var confirmation = confirm("Êtes-vous sûr de vouloir effectuer cette action ?")
+  var confirmation = confirm("Êtes-vous sûr de vouloir effacer ce projet ?")
       if (confirmation) {
         const url = `http://localhost:5678/api/works/${id}`
         fetch(url, {
@@ -271,7 +271,7 @@ function supprimerElementAPI(id) {
           .catch(error => {
             console.error('Erreur de suppression:', error.message)
           })
-        alert("Action effectuée !")
+        alert("Projet supprimé !")
         refreshAfterSuppr()
       } else {
         alert("Action annulée.")
@@ -345,7 +345,8 @@ imgInput.addEventListener("change", function () {
 
 function verifForm() {
   const form = document.querySelector(".addModal_input")
-  if (form.checkValidity()) {
+  const previewImage = document.getElementById("previewImage")
+  if (form.checkValidity() && previewImage !== null) {
     boutonAjoutImage.classList.add("addModal_buttonCheck")
     boutonAjoutImage.classList.remove("addModal_button")   
   }
@@ -372,7 +373,7 @@ async function closeModal2() {
   addCategory.innerHTML = ""
   addImgBouton.style.visibility = "visible"
   const elementASupprimer = document.getElementById("previewImage")
-  if (elementASupprimer) {
+  if (elementASupprimer !== null) {
     elementASupprimer.remove()
   }
   const galerie = document.getElementById("galeriePhotos")
